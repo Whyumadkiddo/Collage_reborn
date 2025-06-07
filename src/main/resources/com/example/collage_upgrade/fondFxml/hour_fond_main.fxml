@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="585.0" prefWidth="1000.0" style="-fx-background-color: #1E1E1E;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.collage_upgrade.fond.HourFondMainController">
+   <children>
+      <Pane fx:id="frstSem" layoutX="167.0" layoutY="188.0" prefHeight="46.0" prefWidth="216.0" style="-fx-background-color: #4CAF50;">
+         <children>
+            <Text fill="WHITE" layoutX="47.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1 семестр">
+               <font>
+                  <Font size="27.0" />
+               </font>
+            </Text>
+         </children>
+      </Pane>
+      <Text fill="WHITE" layoutX="379.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Фонд часов">
+         <font>
+            <Font size="45.0" />
+         </font>
+      </Text>
+      <Pane fx:id="scndSem" layoutX="620.0" layoutY="188.0" prefHeight="46.0" prefWidth="216.0" style="-fx-background-color: #4CAF50;">
+         <children>
+            <Text  fill="WHITE" layoutX="47.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="2 семестр">
+               <font>
+                  <Font size="27.0" />
+               </font>
+            </Text>
+         </children>
+      </Pane>
+      <Pane fx:id="scndGroup" layoutX="550.0" layoutY="321.0" prefHeight="46.0" prefWidth="356.0" style="-fx-background-color: #4CAF50;">
+         <children>
+            <Text  fill="WHITE" layoutX="24.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Деление на подгруппы 2">
+               <font>
+                  <Font size="27.0" />
+               </font>
+            </Text>
+            <Text fill="WHITE" layoutX="34.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0">
+               <font>
+                  <Font size="27.0" />
+               </font>
+            </Text>
+         </children>
+      </Pane>
+      <Pane fx:id="result" layoutX="432.0" layoutY="428.0" prefHeight="46.0" prefWidth="135.0" style="-fx-background-color: #4CAF50;">
+         <children>
+            <Text  fill="WHITE" layoutX="31.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Итого">
+               <font>
+                  <Font size="27.0" />
+               </font>
+            </Text>
+         </children>
+      </Pane>
+      <Pane fx:id="frstGroup" layoutX="97.0" layoutY="321.0" prefHeight="46.0" prefWidth="356.0" style="-fx-background-color: #4CAF50;">
+         <children>
+            <Text  fill="WHITE" layoutX="24.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Деление на подгруппы 1">
+               <font>
+                  <Font size="27.0" />
+               </font>
+            </Text>
+            <Text fill="WHITE" layoutX="34.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0">
+               <font>
+                  <Font size="27.0" />
+               </font>
+            </Text>
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="585.0" prefWidth="1000.0" style="-fx-background-color: #1E1E1E;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.collage_upgrade.fond.UnderGroupFirst">
+    <children>
+        <Text fill="WHITE" layoutX="50.0" layoutY="75.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Деление на подгруппы 1">
+            <font>
+                <Font size="39.0" />
+            </font>
+        </Text>
+      <Pane fx:id="concBtn" layoutX="813.0" layoutY="66.0" prefHeight="52.0" prefWidth="152.0" style="-fx-background-color: #6E6E6E;">
+         <children>
+            <Text fill="WHITE" layoutX="5.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Концетриров">
+               <font>
+                  <Font size="23.0" />
+               </font>
+            </Text>
+         </children>
+      </Pane>
+        <TableView layoutX="11.0" layoutY="105.0" prefHeight="371.0" prefWidth="975.0" style="-fx-background-color: #6E6E6E;">
+            <columns>
+                <TableColumn prefWidth="75.0" text="Группа" />
+                <TableColumn prefWidth="75.0" text="Ин.яз" />
+                <TableColumn prefWidth="75.0" text="Инфор" />
+                <TableColumn prefWidth="81.0" text="Инф проф" />
+                <TableColumn prefWidth="106.0" text="Инф ПКП" />
+                <TableColumn prefWidth="92.0" text="Физ-ра" />
+                <TableColumn prefWidth="114.0" text="Программ++" />
+                <TableColumn prefWidth="90.0" text="МДК л/з" />
+            <TableColumn prefWidth="70.0" text="УП" />
+            <TableColumn prefWidth="91.0" text="УП Спец" />
+            <TableColumn prefWidth="105.0" text="ПП Спец" />
+            </columns>
+        </TableView>
+        <Pane fx:id="LocatePane" layoutX="640.0" layoutY="520.0" prefHeight="35.0" prefWidth="346.0" style="-fx-background-color: #6E6E6E;">
+            <children>
+                <Text fill="WHITE" layoutX="14.0" layoutY="25.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Поиск">
+                    <font>
+                        <Font size="20.0" />
+                    </font>
+                </Text>
+                <Line endX="112.0" layoutX="180.0" layoutY="33.0" startX="-100.0" stroke="WHITE" />
+                <ImageView fitHeight="30.0" fitWidth="28.0" layoutX="304.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../../../../images/locate.png" />
+                    </image>
+                </ImageView>
+            </children>
+        </Pane>
+    </children>
+</AnchorPane>

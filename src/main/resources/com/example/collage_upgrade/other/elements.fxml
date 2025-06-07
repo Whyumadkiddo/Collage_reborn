@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="585.0" prefWidth="1000.0" style="-fx-background-color: #1E1E1E;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.collage_upgrade.other.ElementsController">
+    <children>
+        <Text fill="WHITE" layoutX="44.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Списки">
+            <font>
+                <Font size="40.0" />
+            </font>
+        </Text>
+        <Pane fx:id="groupOuterPane" layoutX="245.0" layoutY="44.0" prefHeight="54.0" prefWidth="194.0" style="-fx-background-color: #8BC34A;">
+            <children>
+                <Pane fx:id="groupInnerPane" layoutX="7.0" layoutY="7.0" prefHeight="40.0" prefWidth="180.0" style="-fx-background-color: #2D2D2D;">
+                    <children>
+                        <Text fill="WHITE" layoutX="50.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Группа">
+                            <font>
+                                <Font size="25.0" />
+                            </font>
+                        </Text>
+                    </children>
+                </Pane>
+            </children>
+        </Pane>
+        <Pane fx:id="teachersOuterPane" layoutX="456.0" layoutY="44.0" prefHeight="54.0" prefWidth="194.0" style="-fx-background-color: #FFFFFF;">
+            <children>
+                <Pane fx:id="teachersInnerPane" layoutX="7.0" layoutY="7.0" prefHeight="40.0" prefWidth="180.0" style="-fx-background-color: #2D2D2D;">
+                    <children>
+                        <Text fill="WHITE" layoutX="1.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Преподаватели">
+                            <font>
+                                <Font size="25.0" />
+                            </font>
+                        </Text>
+                    </children>
+                </Pane>
+            </children>
+        </Pane>
+        <Pane fx:id="subjectsOuterPane" layoutX="668.0" layoutY="44.0" prefHeight="54.0" prefWidth="194.0" style="-fx-background-color: #FFFFFF;">
+            <children>
+                <Pane fx:id="subjectsInnerPane" layoutX="7.0" layoutY="7.0" prefHeight="40.0" prefWidth="180.0" style="-fx-background-color: #2D2D2D;">
+                    <children>
+                        <Text fill="WHITE" layoutX="31.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Предметы">
+                            <font>
+                                <Font size="25.0" />
+                            </font>
+                        </Text>
+                    </children>
+                </Pane>
+            </children>
+        </Pane>
+        <Line endX="562.0" layoutX="342.0" layoutY="131.0" startX="-148.0" stroke="WHITE" />
+        <Line endX="562.0" layoutX="342.0" layoutY="195.0" startX="-148.0" stroke="WHITE" />
+        <Text fill="WHITE" layoutX="484.0" layoutY="171.0" strokeType="OUTSIDE" strokeWidth="0.0" text="№ Группы">
+            <font>
+                <Font size="27.0" />
+            </font>
+        </Text>
+        <Pane layoutX="333.0" layoutY="202.0" prefHeight="382.0" prefWidth="410.0" style="-fx-background-color: #FFFFFF;" />
+        <TableView layoutX="339.0" layoutY="207.0" prefHeight="373.0" prefWidth="399.0" style="-fx-background-color: #2D2D2D;">
+            <columns>
+                <TableColumn prefWidth="398.0" style="-fx-background-color: #2D2D2D;" />
+            </columns>
+        </TableView>
+    </children>
+</AnchorPane>
