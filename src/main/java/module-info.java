@@ -11,6 +11,7 @@ module com.example.collage_upgrade {
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
     requires jdk.hotspot.agent;
+    requires java.sql;
 
     opens com.example.collage_upgrade to javafx.fxml;
     exports com.example.collage_upgrade;
