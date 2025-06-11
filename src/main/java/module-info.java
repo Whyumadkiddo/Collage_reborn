@@ -23,6 +23,7 @@ module com.example.collage_upgrade {
     opens com.example.collage_upgrade.hours_in_week to javafx.fxml;
     exports com.example.collage_upgrade.other;
     opens com.example.collage_upgrade.other to javafx.fxml;
-
+    opens com.example.collage_upgrade.model to javafx.base;
+    exports com.example.collage_upgrade.model;
 
 }

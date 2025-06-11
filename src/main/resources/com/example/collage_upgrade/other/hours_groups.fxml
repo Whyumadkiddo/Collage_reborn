@@ -17,6 +17,8 @@
             <Font size="39.0" />
          </font>
       </Text>
+
+      <!-- Панель выбора категории -->
       <Pane fx:id="mainPane1" layoutX="14.0" layoutY="130.0" prefHeight="40.0" prefWidth="110.0" style="-fx-background-color: #8BC34A;">
          <children>
             <Pane fx:id="mainInnerPane1" layoutX="3.0" layoutY="4.0" prefHeight="28.0" prefWidth="103.0" style="-fx-background-color: #2D2D2D;">
@@ -30,6 +32,7 @@
             </Pane>
          </children>
       </Pane>
+
       <Pane fx:id="subGroupPane1" layoutX="127.0" layoutY="130.0" prefHeight="40.0" prefWidth="110.0" style="-fx-background-color: #FFFFFF;">
          <children>
             <Pane fx:id="subGroupInnerPane1" layoutX="3.0" layoutY="4.0" prefHeight="28.0" prefWidth="103.0" style="-fx-background-color: #2D2D2D;">
@@ -43,6 +46,7 @@
             </Pane>
          </children>
       </Pane>
+
       <Pane fx:id="subGroupProgrammersPane1" layoutX="239.0" layoutY="130.0" prefHeight="40.0" prefWidth="238.0" style="-fx-background-color: #FFFFFF;">
          <children>
             <Pane fx:id="subGroupProgrammersInnerPane1" layoutX="3.0" layoutY="4.0" prefHeight="28.0" prefWidth="233.0" style="-fx-background-color: #2D2D2D;">
@@ -56,6 +60,7 @@
             </Pane>
          </children>
       </Pane>
+
       <Pane fx:id="ppSpecPane1" layoutX="479.0" layoutY="130.0" prefHeight="40.0" prefWidth="85.0" style="-fx-background-color: #FFFFFF;">
          <children>
             <Pane fx:id="ppSpecInnerPane1" layoutX="3.0" layoutY="4.0" prefHeight="28.0" prefWidth="79.0" style="-fx-background-color: #2D2D2D;">
@@ -69,6 +74,7 @@
             </Pane>
          </children>
       </Pane>
+
       <Pane fx:id="upSpecPane1" layoutX="566.0" layoutY="130.0" prefHeight="40.0" prefWidth="85.0" style="-fx-background-color: #FFFFFF;">
          <children>
             <Pane fx:id="upSpecInnerPane1" layoutX="3.0" layoutY="4.0" prefHeight="28.0" prefWidth="78.0" style="-fx-background-color: #2D2D2D;">
@@ -82,6 +88,7 @@
             </Pane>
          </children>
       </Pane>
+
       <Pane fx:id="subGroupUpPane1" layoutX="653.0" layoutY="130.0" prefHeight="40.0" prefWidth="137.0" style="-fx-background-color: #FFFFFF;">
          <children>
             <Pane fx:id="subGroupUpInnerPane1" layoutX="3.0" layoutY="4.0" prefHeight="28.0" prefWidth="131.0" style="-fx-background-color: #2D2D2D;">
@@ -95,6 +102,7 @@
             </Pane>
          </children>
       </Pane>
+
       <Pane fx:id="hoursByPlanPane1" layoutX="792.0" layoutY="130.0" prefHeight="40.0" prefWidth="193.0" style="-fx-background-color: #FFFFFF;">
          <children>
             <Pane fx:id="hoursByPlanInnerPane1" layoutX="3.0" layoutY="4.0" prefHeight="28.0" prefWidth="186.0" style="-fx-background-color: #2D2D2D;">
@@ -108,16 +116,59 @@
             </Pane>
          </children>
       </Pane>
-      <TableView layoutX="14.0" layoutY="158.0" prefHeight="378.0" prefWidth="972.0" style="-fx-background-color: #6E6E6E;">
+
+      <!-- Таблица -->
+      <TableView fx:id="mainTable" layoutX="14.0" layoutY="158.0" prefHeight="378.0" prefWidth="972.0" style="-fx-background-color: #6E6E6E;">
          <columns>
-            <TableColumn prefWidth="197.0" text="Преподаватель" />
-            <TableColumn prefWidth="100.0" text="Семестр" />
-            <TableColumn minWidth="0.0" prefWidth="101.0" text="Часы в неделю" />
-            <TableColumn prefWidth="119.0" text="Часы по учебному" />
-            <TableColumn prefWidth="293.0" text="Предмет" />
-            <TableColumn prefWidth="161.0" text="Итого" />
+            <TableColumn fx:id="teacherCol" prefWidth="164.0" text="Преподаватель" />
+            <TableColumn prefWidth="213.0" text="1 Семестр">
+               <columns>
+                  <TableColumn prefWidth="106.0" text="Часы в неделю" />
+                  <TableColumn prefWidth="123.0" text="Часы по учебному" />
+               </columns>
+            </TableColumn>
+            <TableColumn prefWidth="224.0" text="2 Семестр">
+               <columns>
+                  <TableColumn prefWidth="104.0" text="Часы в неделю" />
+                  <TableColumn prefWidth="119.0" text="Часы по учебному" />
+               </columns>
+            </TableColumn>
+            <TableColumn fx:id="subjectCol" prefWidth="208.0" text="Предмет" />
+            <TableColumn fx:id="totalCol" prefWidth="147.0" text="Итого" />
          </columns>
       </TableView>
+
+      <!-- Кнопки управления -->
+      <Pane fx:id="addButton" layoutX="14.0" layoutY="542.0" prefHeight="35.0" prefWidth="100.0" style="-fx-background-color: #6E6E6E;">
+         <children>
+            <Text fill="WHITE" layoutX="10.0" layoutY="25.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Добавить">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Text>
+         </children>
+      </Pane>
+
+      <Pane fx:id="editButton" layoutX="124.0" layoutY="542.0" prefHeight="35.0" prefWidth="100.0" style="-fx-background-color: #6E6E6E;">
+         <children>
+            <Text fill="WHITE" layoutX="10.0" layoutY="25.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Изменить">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Text>
+         </children>
+      </Pane>
+
+      <Pane fx:id="deleteButton" layoutX="234.0" layoutY="542.0" prefHeight="35.0" prefWidth="100.0" style="-fx-background-color: #6E6E6E;">
+         <children>
+            <Text fill="WHITE" layoutX="10.0" layoutY="25.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Удалить">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Text>
+         </children>
+      </Pane>
+
       <Pane fx:id="LocatePane" layoutX="640.0" layoutY="542.0" prefHeight="35.0" prefWidth="346.0" style="-fx-background-color: #6E6E6E;">
          <children>
             <Text fill="WHITE" layoutX="14.0" layoutY="25.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Поиск">
@@ -133,6 +184,7 @@
             </ImageView>
          </children>
       </Pane>
+
       <Pane fx:id="LocateGroupPane" layoutX="14.0" layoutY="82.0" prefHeight="40.0" prefWidth="233.0" style="-fx-background-color: #6E6E6E;">
          <children>
             <Text fill="WHITE" layoutX="8.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Группа:">
