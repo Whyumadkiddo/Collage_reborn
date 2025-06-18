@@ -30,31 +30,6 @@ public class HoursRepository {
         }
         return teachers;
     }
-    public static ObservableList<TableData> loadAllTableData() throws SQLException {
-        ObservableList<TableData> data = FXCollections.observableArrayList();
-        String query = "SELECT * FROM hours_data";
-
-        try (Connection connection = Database.getConnection();
-             Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(query)) {
-
-            while (resultSet.next()) {
-                TableData tableData = new TableData(
-                        resultSet.getString("teacher"),
-                        resultSet.getString("subject"),
-                        "1", // Номер семестра 1
-                        resultSet.getString("semester1_hours_week"),
-                        resultSet.getString("semester1_hours_plan"),
-                        "2", // Номер семестра 2
-                        resultSet.getString("semester2_hours_week"),
-                        resultSet.getString("semester2_hours_plan"),
-                        resultSet.getString("total")
-                );
-                data.add(tableData);
-            }
-        }
-        return data;
-    }
 
     // Метод для получения списка предметов
     public static ObservableList<String> getSubjects() throws SQLException {
@@ -72,11 +47,51 @@ public class HoursRepository {
         return subjects;
     }
 
-    // Метод для сохранения данных в базу
-    public static void saveTableData(TableData data, String category) throws SQLException {
+    // Метод для получения списка групп
+    public static ObservableList<String> getGroups() throws SQLException {
+        ObservableList<String> groups = FXCollections.observableArrayList();
+        String query = "SELECT group_number FROM groups ORDER BY group_number";
+
+        try (Connection connection = Database.getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(query)) {
+
+            while (resultSet.next()) {
+                groups.add(resultSet.getString("group_number"));
+            }
+        }
+        return groups;
+    }
+
+    // Метод для получения ID группы по номеру группы
+    public static int getGroupId(String groupNumber) throws SQLException {
+        if (groupNumber == null || groupNumber.isEmpty()) {
+            return -1;
+        }
+
+        String query = "SELECT id FROM groups WHERE group_number = ?";
+
+        try (Connection connection = Database.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.setString(1, groupNumber);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt("id");
+                }
+            }
+        }
+        return -1; // Если группа не найдена
+    }
+
+    // Метод для сохранения данных в базу с учетом группы
+    public static void saveTableData(TableData data, String category, String groupNumber) throws SQLException {
+        int groupId = getGroupId(groupNumber);
+
         String query = "INSERT INTO hours_data (teacher, subject, semester1_hours_week, semester1_hours_plan, " +
-                "semester2_hours_week, semester2_hours_plan, total, category) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                "semester2_hours_week, semester2_hours_plan, total, category, group_id) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection connection = Database.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -90,15 +105,29 @@ public class HoursRepository {
             statement.setString(7, data.getTotal());
             statement.setString(8, category);
 
+            if (groupId != -1) {
+                statement.setInt(9, groupId);
+            } else {
+                statement.setNull(9, Types.INTEGER);
+            }
+
             statement.executeUpdate();
         }
     }
 
-    // Метод для обновления данных в базе
-    public static void updateTableData(TableData data, String category) throws SQLException {
+    // Метод для обновления данных в базе с учетом группы
+    public static void updateTableData(TableData data, String category, String groupNumber) throws SQLException {
+        int groupId = getGroupId(groupNumber);
+
         String query = "UPDATE hours_data SET subject = ?, semester1_hours_week = ?, " +
                 "semester1_hours_plan = ?, semester2_hours_week = ?, semester2_hours_plan = ?, " +
                 "total = ? WHERE teacher = ? AND category = ?";
+
+        if (groupId != -1) {
+            query += " AND group_id = ?";
+        } else {
+            query += " AND group_id IS NULL";
+        }
 
         try (Connection connection = Database.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -112,13 +141,25 @@ public class HoursRepository {
             statement.setString(7, data.getTeacher());
             statement.setString(8, category);
 
+            if (groupId != -1) {
+                statement.setInt(9, groupId);
+            }
+
             statement.executeUpdate();
         }
     }
 
-    // Метод для удаления данных из базы
-    public static void deleteTableData(String teacher, String category) throws SQLException {
+    // Метод для удаления данных из базы с учетом группы
+    public static void deleteTableData(String teacher, String category, String groupNumber) throws SQLException {
+        int groupId = getGroupId(groupNumber);
+
         String query = "DELETE FROM hours_data WHERE teacher = ? AND category = ?";
+
+        if (groupId != -1) {
+            query += " AND group_id = ?";
+        } else {
+            query += " AND group_id IS NULL";
+        }
 
         try (Connection connection = Database.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -126,29 +167,45 @@ public class HoursRepository {
             statement.setString(1, teacher);
             statement.setString(2, category);
 
+            if (groupId != -1) {
+                statement.setInt(3, groupId);
+            }
+
             statement.executeUpdate();
         }
     }
 
-    // Метод для загрузки данных из базы для конкретной категории
-    public static ObservableList<TableData> loadTableData(String category) throws SQLException {
+    // Метод для загрузки данных из базы для конкретной категории и группы
+    public static ObservableList<TableData> loadTableData(String category, String groupNumber) throws SQLException {
         ObservableList<TableData> data = FXCollections.observableArrayList();
+        int groupId = getGroupId(groupNumber);
+
         String query = "SELECT * FROM hours_data WHERE category = ?";
+
+        if (groupId != -1) {
+            query += " AND group_id = ?";
+        } else {
+            query += " AND group_id IS NULL";
+        }
 
         try (Connection connection = Database.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setString(1, category);
 
+            if (groupId != -1) {
+                statement.setInt(2, groupId);
+            }
+
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     TableData tableData = new TableData(
                             resultSet.getString("teacher"),
                             resultSet.getString("subject"),
-                            "1", // Номер семестра 1
+                            "1",
                             resultSet.getString("semester1_hours_week"),
                             resultSet.getString("semester1_hours_plan"),
-                            "2", // Номер семестра 2
+                            "2",
                             resultSet.getString("semester2_hours_week"),
                             resultSet.getString("semester2_hours_plan"),
                             resultSet.getString("total")
@@ -158,25 +215,5 @@ public class HoursRepository {
             }
         }
         return data;
-    }
-
-    // Метод для создания таблицы в базе данных (если её нет)
-    public static void createHoursTableIfNotExists() throws SQLException {
-        String query = "CREATE TABLE IF NOT EXISTS hours_data (" +
-                "id SERIAL PRIMARY KEY, " +
-                "teacher VARCHAR(255) NOT NULL, " +
-                "subject VARCHAR(255) NOT NULL, " +
-                "semester1_hours_week VARCHAR(50), " +
-                "semester1_hours_plan VARCHAR(50), " +
-                "semester2_hours_week VARCHAR(50), " +
-                "semester2_hours_plan VARCHAR(50), " +
-                "total VARCHAR(50), " +
-                "category VARCHAR(100)" +
-                ")";
-
-        try (Connection connection = Database.getConnection();
-             Statement statement = connection.createStatement()) {
-            statement.execute(query);
-        }
     }
 }

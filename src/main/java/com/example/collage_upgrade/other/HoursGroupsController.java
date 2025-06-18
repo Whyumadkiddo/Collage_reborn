@@ -1,5 +1,6 @@
 package com.example.collage_upgrade.other;
 
+import com.example.collage_upgrade.database.DatabaseInitializer;
 import com.example.collage_upgrade.database.HoursRepository;
 import com.example.collage_upgrade.model.TableData;
 import com.example.collage_upgrade.util.DialogUtils;
@@ -49,33 +50,62 @@ public class HoursGroupsController {
     @FXML private TableColumn<TableData, String> subjectCol;
     @FXML private TableColumn<TableData, String> totalCol;
 
+    // Поле для выбора группы
+    @FXML private ComboBox<String> groupComboBox;
+
     private String currentCategory = "Основные";
+    private String currentGroup = "";
     private ObservableList<TableData> tableDataList = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
+        // Инициализируем базу данных
+        DatabaseInitializer.initializeDatabase();
+
+        // Применяем стили ко всем панелям
+        applyPaneStyles();
+
+        // Настройка обработчиков событий
+        setupPaneHandlers();
+        setupButtonHandlers();
+
+        // Инициализация таблицы
+        setupTableColumns();
+
+        // Загружаем список групп
+        loadGroups();
+
+        // По умолчанию показываем основную таблицу
+        mainTable.setVisible(true);
+
+        // Загружаем данные для основной категории
+        loadDataForTable(currentCategory, currentGroup);
+
+    }
+
+    private void loadGroups() {
         try {
-            // Инициализируем таблицу в базе данных
-            HoursRepository.createHoursTableIfNotExists();
+            ObservableList<String> groups = HoursRepository.getGroups();
+            groupComboBox.setItems(groups);
 
-            // Применяем стили ко всем панелям
-            applyPaneStyles();
+            // Добавляем пустой элемент для возможности выбора без группы
+            groups.add(0, "Все группы");
 
-            // Настройка обработчиков событий
-            setupPaneHandlers();
-            setupButtonHandlers();
+            // Устанавливаем обработчик выбора группы
+            groupComboBox.setOnAction(event -> {
+                String selectedGroup = groupComboBox.getSelectionModel().getSelectedItem();
+                if (selectedGroup != null) {
+                    currentGroup = selectedGroup.equals("Все группы") ? "" : selectedGroup;
+                    loadDataForTable(currentCategory, currentGroup);
+                }
+            });
 
-            // Инициализация таблицы
-            setupTableColumns();
-
-            // По умолчанию показываем основную таблицу
-            mainTable.setVisible(true);
-
-            // Загружаем данные для основной категории
-            loadDataForTable("Основные");
+            // Выбираем первый элемент по умолчанию
+            groupComboBox.getSelectionModel().selectFirst();
+            currentGroup = "";
 
         } catch (SQLException e) {
-            showErrorDialog("Ошибка при инициализации: " + e.getMessage());
+            showErrorDialog("Ошибка при загрузке списка групп: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -169,8 +199,8 @@ public class HoursGroupsController {
 
         currentCategory = category;
 
-        // Загружаем данные для выбранной категории
-        loadDataForTable(category);
+        // Загружаем данные для выбранной категории и группы
+        loadDataForTable(currentCategory, currentGroup);
     }
 
     private void resetPaneStyles() {
@@ -185,9 +215,9 @@ public class HoursGroupsController {
 
     private void setupTableColumns() {
         // Настройка основных колонок
-        teacherCol.setCellValueFactory(new PropertyValueFactory<>("teacher"));
-        subjectCol.setCellValueFactory(new PropertyValueFactory<>("subject"));
-        totalCol.setCellValueFactory(new PropertyValueFactory<>("total"));
+        teacherCol.setCellValueFactory(cellData -> cellData.getValue().teacherProperty());
+        subjectCol.setCellValueFactory(cellData -> cellData.getValue().subjectProperty());
+        totalCol.setCellValueFactory(cellData -> cellData.getValue().totalProperty());
 
         // Создаем колонки для семестров
         TableColumn<TableData, String> hoursPerWeek1Col = new TableColumn<>("Часы в неделю");
@@ -196,10 +226,10 @@ public class HoursGroupsController {
         TableColumn<TableData, String> hoursByPlan2Col = new TableColumn<>("Часы по учебному");
 
         // Настраиваем колонки для семестров
-        hoursPerWeek1Col.setCellValueFactory(new PropertyValueFactory<>("hoursPerWeek1"));
-        hoursByPlan1Col.setCellValueFactory(new PropertyValueFactory<>("hoursByPlan1"));
-        hoursPerWeek2Col.setCellValueFactory(new PropertyValueFactory<>("hoursPerWeek2"));
-        hoursByPlan2Col.setCellValueFactory(new PropertyValueFactory<>("hoursByPlan2"));
+        hoursPerWeek1Col.setCellValueFactory(cellData -> cellData.getValue().hoursPerWeek1Property());
+        hoursByPlan1Col.setCellValueFactory(cellData -> cellData.getValue().hoursByPlan1Property());
+        hoursPerWeek2Col.setCellValueFactory(cellData -> cellData.getValue().hoursPerWeek2Property());
+        hoursByPlan2Col.setCellValueFactory(cellData -> cellData.getValue().hoursByPlan2Property());
 
         // Создаем колонку для 1 семестра
         TableColumn<TableData, ?> semester1Group = new TableColumn<>("1 Семестр");
@@ -221,13 +251,13 @@ public class HoursGroupsController {
         mainTable.getColumns().setAll(columns);
     }
 
-    private void loadDataForTable(String category) {
+    private void loadDataForTable(String category, String groupNumber) {
         try {
             // Очищаем текущие данные
             tableDataList.clear();
 
             // Загружаем данные из базы
-            ObservableList<TableData> data = HoursRepository.loadTableData(category);
+            ObservableList<TableData> data = HoursRepository.loadTableData(category, groupNumber);
 
             // Добавляем данные в список
             tableDataList.addAll(data);
@@ -239,10 +269,8 @@ public class HoursGroupsController {
             mainTable.refresh();
 
             // Выводим данные в консоль для диагностики
-            System.out.println("Загружено " + data.size() + " записей для категории: " + category);
-            for (TableData dataItem : data) {
-                System.out.println(dataItem.getTeacher() + " - " + dataItem.getSubject() + " - " + dataItem.getTotal());
-            }
+            System.out.println("Загружено " + data.size() + " записей для категории: " + category +
+                    (groupNumber.isEmpty() ? "" : " и группы: " + groupNumber));
         } catch (SQLException e) {
             showErrorDialog("Ошибка при загрузке данных: " + e.getMessage());
             e.printStackTrace();
@@ -318,10 +346,10 @@ public class HoursGroupsController {
                         TableData newData = new TableData(
                                 teacherComboBox.getValue(),
                                 subjectComboBox.getValue(),
-                                "1", // Номер семестра 1
+                                "1",
                                 hoursPerWeek1Field.getText(),
                                 hoursByPlan1Field.getText(),
-                                "2", // Номер семестра 2
+                                "2",
                                 hoursPerWeek2Field.getText(),
                                 hoursByPlan2Field.getText(),
                                 String.valueOf(total)
@@ -329,7 +357,7 @@ public class HoursGroupsController {
 
                         try {
                             // Сохраняем данные в базу
-                            HoursRepository.saveTableData(newData, currentCategory);
+                            HoursRepository.saveTableData(newData, currentCategory, currentGroup);
 
                             // Добавляем данные в список и обновляем таблицу
                             tableDataList.add(newData);
@@ -443,7 +471,7 @@ public class HoursGroupsController {
 
                         try {
                             // Обновляем данные в базе
-                            HoursRepository.updateTableData(selectedItem, currentCategory);
+                            HoursRepository.updateTableData(selectedItem, currentCategory, currentGroup);
 
                             // Обновляем таблицу
                             mainTable.refresh();
@@ -482,7 +510,7 @@ public class HoursGroupsController {
         if (result.isPresent() && result.get() == ButtonType.OK) {
             try {
                 // Удаляем данные из базы
-                HoursRepository.deleteTableData(selectedItem.getTeacher(), currentCategory);
+                HoursRepository.deleteTableData(selectedItem.getTeacher(), currentCategory, currentGroup);
 
                 // Удаляем данные из списка
                 tableDataList.remove(selectedItem);
