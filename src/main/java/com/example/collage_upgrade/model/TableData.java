@@ -14,10 +14,11 @@ public class TableData {
     private final StringProperty hoursByPlan2;
     private final StringProperty total;
 
-    public TableData(String teacher, String subject,
-                     String semester1, String hoursPerWeek1, String hoursByPlan1,
-                     String semester2, String hoursPerWeek2, String hoursByPlan2,
-                     String total) {
+    /**
+     * Конструктор класса TableData
+     */
+    public TableData(String teacher, String subject, String semester1, String hoursPerWeek1, String hoursByPlan1,
+                     String semester2, String hoursPerWeek2, String hoursByPlan2, String total) {
         this.teacher = new SimpleStringProperty(teacher);
         this.subject = new SimpleStringProperty(subject);
         this.semester1 = new SimpleStringProperty(semester1);

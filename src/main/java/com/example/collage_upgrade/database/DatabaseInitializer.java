@@ -3,6 +3,9 @@ package com.example.collage_upgrade.database;
 import java.sql.*;
 
 public class DatabaseInitializer {
+    /**
+     * Инициализирует базу данных, создавая необходимые таблицы
+     */
     public static void initializeDatabase() {
         try (Connection connection = Database.getConnection()) {
             // Создаем таблицу групп
@@ -28,13 +31,16 @@ public class DatabaseInitializer {
             // Проверяем и обновляем структуру таблицы hours_data
             updateHoursDataTable(connection);
 
-            System.out.println("Database initialized successfully.");
+            System.out.println("База данных успешно инициализирована.");
         } catch (SQLException e) {
-            System.err.println("Error initializing database: " + e.getMessage());
-            throw new RuntimeException("Failed to initialize database", e);
+            System.err.println("Ошибка инициализации базы данных: " + e.getMessage());
+            throw new RuntimeException("Не удалось инициализировать базу данных", e);
         }
     }
 
+    /**
+     * Создает таблицу в базе данных, если она не существует
+     */
     private static void createTableIfNotExists(Connection connection, String tableName, String createTableSQL) {
         try {
             DatabaseMetaData metaData = connection.getMetaData();
@@ -42,16 +48,19 @@ public class DatabaseInitializer {
                 if (!tables.next()) {
                     try (Statement statement = connection.createStatement()) {
                         statement.execute(createTableSQL);
-                        System.out.println("Created table: " + tableName);
+                        System.out.println("Создана таблица: " + tableName);
                     }
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Error creating table " + tableName + ": " + e.getMessage());
-            throw new RuntimeException("Failed to create table " + tableName, e);
+            System.err.println("Ошибка при создании таблицы " + tableName + ": " + e.getMessage());
+            throw new RuntimeException("Не удалось создать таблицу " + tableName, e);
         }
     }
 
+    /**
+     * Обновляет структуру таблицы hours_data, добавляя недостающие столбцы и ограничения
+     */
     private static void updateHoursDataTable(Connection connection) {
         try {
             // Проверяем существование таблицы
@@ -67,7 +76,7 @@ public class DatabaseInitializer {
                 return;
             }
 
-            // Проверяем существование столбца group_id
+            // Проверяем наличие столбца group_id
             boolean hasGroupIdColumn = false;
             try (ResultSet columns = metaData.getColumns(null, null, "hours_data", "group_id")) {
                 hasGroupIdColumn = columns.next();
@@ -77,11 +86,11 @@ public class DatabaseInitializer {
                 // Если столбец group_id не существует, добавляем его
                 try (Statement statement = connection.createStatement()) {
                     statement.execute("ALTER TABLE hours_data ADD COLUMN group_id INTEGER");
-                    System.out.println("Added column group_id to hours_data table");
+                    System.out.println("Добавлен столбец group_id в таблицу hours_data");
                 }
             }
 
-            // Проверяем существование внешнего ключа для group_id
+            // Проверяем наличие внешнего ключа для group_id
             boolean hasForeignKey = false;
             try (ResultSet foreignKeys = metaData.getImportedKeys(null, null, "hours_data")) {
                 while (foreignKeys.next()) {
@@ -97,16 +106,18 @@ public class DatabaseInitializer {
                 try (Statement statement = connection.createStatement()) {
                     statement.execute("ALTER TABLE hours_data ADD CONSTRAINT fk_group " +
                             "FOREIGN KEY (group_id) REFERENCES groups(id)");
-                    System.out.println("Added foreign key constraint for group_id in hours_data table");
+                    System.out.println("Добавлено ограничение внешнего ключа для group_id в таблице hours_data");
                 }
             }
-
         } catch (SQLException e) {
-            System.err.println("Error updating hours_data table: " + e.getMessage());
-            throw new RuntimeException("Failed to update hours_data table", e);
+            System.err.println("Ошибка при обновлении таблицы hours_data: " + e.getMessage());
+            throw new RuntimeException("Не удалось обновить таблицу hours_data", e);
         }
     }
 
+    /**
+     * Создает таблицу hours_data с полной структурой
+     */
     private static void createHoursDataTable(Connection connection) throws SQLException {
         try (Statement statement = connection.createStatement()) {
             statement.execute(
@@ -120,9 +131,8 @@ public class DatabaseInitializer {
                             "semester2_hours_plan VARCHAR(50), " +
                             "total VARCHAR(50), " +
                             "category VARCHAR(100), " +
-                            "group_id INTEGER REFERENCES groups(id))"
-            );
-            System.out.println("Created hours_data table with correct structure");
+                            "group_id INTEGER REFERENCES groups(id))");
+            System.out.println("Создана таблица hours_data с правильной структурой");
         }
     }
 }

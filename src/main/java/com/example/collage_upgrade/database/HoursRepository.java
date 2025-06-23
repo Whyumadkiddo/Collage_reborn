@@ -3,11 +3,12 @@ package com.example.collage_upgrade.database;
 import com.example.collage_upgrade.model.TableData;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
 import java.sql.*;
 
 public class HoursRepository {
-    // Метод для получения списка преподавателей
+    /**
+     * Получает список преподавателей из базы данных
+     */
     public static ObservableList<String> getTeachers() throws SQLException {
         ObservableList<String> teachers = FXCollections.observableArrayList();
         String query = "SELECT surname, name, patronymic FROM teachers ORDER BY surname";
@@ -31,7 +32,9 @@ public class HoursRepository {
         return teachers;
     }
 
-    // Метод для получения списка предметов
+    /**
+     * Получает список предметов из базы данных
+     */
     public static ObservableList<String> getSubjects() throws SQLException {
         ObservableList<String> subjects = FXCollections.observableArrayList();
         String query = "SELECT name FROM subjects ORDER BY name";
@@ -47,7 +50,9 @@ public class HoursRepository {
         return subjects;
     }
 
-    // Метод для получения списка групп
+    /**
+     * Получает список групп из базы данных
+     */
     public static ObservableList<String> getGroups() throws SQLException {
         ObservableList<String> groups = FXCollections.observableArrayList();
         String query = "SELECT group_number FROM groups ORDER BY group_number";
@@ -63,19 +68,19 @@ public class HoursRepository {
         return groups;
     }
 
-    // Метод для получения ID группы по номеру группы
+    /**
+     * Получает идентификатор группы по ее номеру
+     */
     public static int getGroupId(String groupNumber) throws SQLException {
         if (groupNumber == null || groupNumber.isEmpty()) {
             return -1;
         }
 
         String query = "SELECT id FROM groups WHERE group_number = ?";
-
         try (Connection connection = Database.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setString(1, groupNumber);
-
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
                     return resultSet.getInt("id");
@@ -85,10 +90,11 @@ public class HoursRepository {
         return -1; // Если группа не найдена
     }
 
-    // Метод для сохранения данных в базу с учетом группы
+    /**
+     * Сохраняет данные в базу данных с учетом группы
+     */
     public static void saveTableData(TableData data, String category, String groupNumber) throws SQLException {
         int groupId = getGroupId(groupNumber);
-
         String query = "INSERT INTO hours_data (teacher, subject, semester1_hours_week, semester1_hours_plan, " +
                 "semester2_hours_week, semester2_hours_plan, total, category, group_id) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -115,10 +121,11 @@ public class HoursRepository {
         }
     }
 
-    // Метод для обновления данных в базе с учетом группы
+    /**
+     * Обновляет данные в базе данных с учетом группы
+     */
     public static void updateTableData(TableData data, String category, String groupNumber) throws SQLException {
         int groupId = getGroupId(groupNumber);
-
         String query = "UPDATE hours_data SET subject = ?, semester1_hours_week = ?, " +
                 "semester1_hours_plan = ?, semester2_hours_week = ?, semester2_hours_plan = ?, " +
                 "total = ? WHERE teacher = ? AND category = ?";
@@ -149,10 +156,11 @@ public class HoursRepository {
         }
     }
 
-    // Метод для удаления данных из базы с учетом группы
+    /**
+     * Удаляет данные из базы данных с учетом группы
+     */
     public static void deleteTableData(String teacher, String category, String groupNumber) throws SQLException {
         int groupId = getGroupId(groupNumber);
-
         String query = "DELETE FROM hours_data WHERE teacher = ? AND category = ?";
 
         if (groupId != -1) {
@@ -175,13 +183,14 @@ public class HoursRepository {
         }
     }
 
-    // Метод для загрузки данных из базы для конкретной категории и группы
+    /**
+     * Загружает данные из базы для конкретной категории и группы
+     */
     public static ObservableList<TableData> loadTableData(String category, String groupNumber) throws SQLException {
         ObservableList<TableData> data = FXCollections.observableArrayList();
         int groupId = getGroupId(groupNumber);
 
         String query = "SELECT * FROM hours_data WHERE category = ?";
-
         if (groupId != -1) {
             query += " AND group_id = ?";
         } else {
@@ -192,7 +201,6 @@ public class HoursRepository {
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setString(1, category);
-
             if (groupId != -1) {
                 statement.setInt(2, groupId);
             }

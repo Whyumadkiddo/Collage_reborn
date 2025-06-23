@@ -4,7 +4,7 @@ import com.example.collage_upgrade.util.PaneUtils;
 import javafx.fxml.FXML;
 import javafx.scene.layout.Pane;
 
-public class SecondSemester {
+public class FirstSemesterController {
     @FXML
     private Pane LocatePane;
 

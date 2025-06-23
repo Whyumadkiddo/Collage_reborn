@@ -13,7 +13,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.util.Pair;
-
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,8 +33,8 @@ public class HoursGroupsController {
     @FXML private Pane subGroupUpInnerPane1;
     @FXML private Pane hoursByPlanPane1;
     @FXML private Pane hoursByPlanInnerPane1;
-    @FXML private Pane LocatePane;
-    @FXML private Pane LocateGroupPane;
+    @FXML private Pane locatePane;
+    @FXML private Pane locateGroupPane;
 
     // Кнопки управления
     @FXML private Pane addButton;
@@ -57,6 +56,9 @@ public class HoursGroupsController {
     private String currentGroup = "";
     private ObservableList<TableData> tableDataList = FXCollections.observableArrayList();
 
+    /**
+     * Инициализация контроллера, настройка таблицы и загрузка данных
+     */
     @FXML
     public void initialize() {
         // Инициализируем базу данных
@@ -80,9 +82,11 @@ public class HoursGroupsController {
 
         // Загружаем данные для основной категории
         loadDataForTable(currentCategory, currentGroup);
-
     }
 
+    /**
+     * Загружает список групп в ComboBox
+     */
     private void loadGroups() {
         try {
             ObservableList<String> groups = HoursRepository.getGroups();
@@ -103,13 +107,15 @@ public class HoursGroupsController {
             // Выбираем первый элемент по умолчанию
             groupComboBox.getSelectionModel().selectFirst();
             currentGroup = "";
-
         } catch (SQLException e) {
             showErrorDialog("Ошибка при загрузке списка групп: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
+    /**
+     * Применяет стили ко всем панелям
+     */
     private void applyPaneStyles() {
         PaneUtils.applyRoundedStyle(mainPane1);
         PaneUtils.applyRoundedStyle(mainInnerPane1);
@@ -125,13 +131,16 @@ public class HoursGroupsController {
         PaneUtils.applyRoundedStyle(subGroupUpInnerPane1);
         PaneUtils.applyRoundedStyle(hoursByPlanPane1);
         PaneUtils.applyRoundedStyle(hoursByPlanInnerPane1);
-        PaneUtils.applyRoundedStyle(LocatePane);
-        PaneUtils.applyRoundedStyle(LocateGroupPane);
+        PaneUtils.applyRoundedStyle(locatePane);
+        PaneUtils.applyRoundedStyle(locateGroupPane);
         PaneUtils.applyRoundedStyle(addButton);
         PaneUtils.applyRoundedStyle(editButton);
         PaneUtils.applyRoundedStyle(deleteButton);
     }
 
+    /**
+     * Настраивает обработчики событий для панелей категорий
+     */
     private void setupPaneHandlers() {
         mainPane1.setOnMouseClicked(event -> {
             switchCategory("Основные");
@@ -162,12 +171,18 @@ public class HoursGroupsController {
         });
     }
 
+    /**
+     * Настраивает обработчики событий для кнопок управления
+     */
     private void setupButtonHandlers() {
         addButton.setOnMouseClicked(event -> handleAddButtonClick());
         editButton.setOnMouseClicked(event -> handleEditButtonClick());
         deleteButton.setOnMouseClicked(event -> handleDeleteButtonClick());
     }
 
+    /**
+     * Переключает текущую категорию и обновляет таблицу
+     */
     private void switchCategory(String category) {
         // Сбрасываем стили всех панелей
         resetPaneStyles();
@@ -203,6 +218,9 @@ public class HoursGroupsController {
         loadDataForTable(currentCategory, currentGroup);
     }
 
+    /**
+     * Сбрасывает стили всех панелей категорий
+     */
     private void resetPaneStyles() {
         mainPane1.setStyle("-fx-background-color: #FFFFFF;");
         subGroupPane1.setStyle("-fx-background-color: #FFFFFF;");
@@ -213,6 +231,9 @@ public class HoursGroupsController {
         hoursByPlanPane1.setStyle("-fx-background-color: #FFFFFF;");
     }
 
+    /**
+     * Настраивает колонки таблицы
+     */
     private void setupTableColumns() {
         // Настройка основных колонок
         teacherCol.setCellValueFactory(cellData -> cellData.getValue().teacherProperty());
@@ -251,6 +272,9 @@ public class HoursGroupsController {
         mainTable.getColumns().setAll(columns);
     }
 
+    /**
+     * Загружает данные для таблицы из базы данных
+     */
     private void loadDataForTable(String category, String groupNumber) {
         try {
             // Очищаем текущие данные
@@ -277,6 +301,9 @@ public class HoursGroupsController {
         }
     }
 
+    /**
+     * Обрабатывает клик по кнопке добавления записи
+     */
     private void handleAddButtonClick() {
         try {
             // Получаем данные из базы
@@ -323,12 +350,10 @@ public class HoursGroupsController {
             grid.add(teacherComboBox, 1, 0);
             grid.add(new Label("Предмет:"), 0, 1);
             grid.add(subjectComboBox, 1, 1);
-
             grid.add(new Label("1 Семестр - Часы в неделю:"), 0, 2);
             grid.add(hoursPerWeek1Field, 1, 2);
             grid.add(new Label("1 Семестр - Часы по учебному:"), 0, 3);
             grid.add(hoursByPlan1Field, 1, 3);
-
             grid.add(new Label("2 Семестр - Часы в неделю:"), 0, 4);
             grid.add(hoursPerWeek2Field, 1, 4);
             grid.add(new Label("2 Семестр - Часы по учебному:"), 0, 5);
@@ -379,13 +404,15 @@ public class HoursGroupsController {
             });
 
             dialog.showAndWait();
-
         } catch (SQLException e) {
             showErrorDialog("Ошибка при загрузке данных: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
+    /**
+     * Обрабатывает клик по кнопке редактирования записи
+     */
     private void handleEditButtonClick() {
         TableData selectedItem = mainTable.getSelectionModel().getSelectedItem();
         if (selectedItem == null) {
@@ -440,12 +467,10 @@ public class HoursGroupsController {
             grid.add(teacherComboBox, 1, 0);
             grid.add(new Label("Предмет:"), 0, 1);
             grid.add(subjectComboBox, 1, 1);
-
             grid.add(new Label("1 Семестр - Часы в неделю:"), 0, 2);
             grid.add(hoursPerWeek1Field, 1, 2);
             grid.add(new Label("1 Семестр - Часы по учебному:"), 0, 3);
             grid.add(hoursByPlan1Field, 1, 3);
-
             grid.add(new Label("2 Семестр - Часы в неделю:"), 0, 4);
             grid.add(hoursPerWeek2Field, 1, 4);
             grid.add(new Label("2 Семестр - Часы по учебному:"), 0, 5);
@@ -475,6 +500,7 @@ public class HoursGroupsController {
 
                             // Обновляем таблицу
                             mainTable.refresh();
+
                             return selectedItem;
                         } catch (SQLException e) {
                             showErrorDialog("Ошибка при обновлении данных: " + e.getMessage());
@@ -490,13 +516,15 @@ public class HoursGroupsController {
             });
 
             dialog.showAndWait();
-
         } catch (SQLException e) {
             showErrorDialog("Ошибка при загрузке данных: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
+    /**
+     * Обрабатывает клик по кнопке удаления записи
+     */
     private void handleDeleteButtonClick() {
         TableData selectedItem = mainTable.getSelectionModel().getSelectedItem();
         if (selectedItem == null) {
@@ -525,6 +553,9 @@ public class HoursGroupsController {
         }
     }
 
+    /**
+     * Показывает диалоговое окно с ошибкой
+     */
     private void showErrorDialog(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Ошибка");

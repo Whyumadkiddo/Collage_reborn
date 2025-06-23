@@ -11,7 +11,7 @@
 <?import javafx.scene.text.Text?>
 
 
-<AnchorPane prefHeight="585.0" prefWidth="1000.0" style="-fx-background-color: #1E1E1E;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.collage_upgrade.hours_in_week.FirstSemester">
+<AnchorPane prefHeight="585.0" prefWidth="1000.0" style="-fx-background-color: #1E1E1E;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.collage_upgrade.hours_in_week.FirstSemesterController">
    <children>
       <Text fill="WHITE" layoutX="38.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1 Семестр">
          <font>

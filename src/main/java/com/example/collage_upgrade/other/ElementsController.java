@@ -13,13 +13,11 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
 
 public class ElementsController {
-
     @FXML private Pane groupOuterPane;
     @FXML private Pane groupInnerPane;
     @FXML private Pane teachersOuterPane;
@@ -43,6 +41,9 @@ public class ElementsController {
     private String currentCategory = "Преподаватель";
     private String currentTable = "teachers";
 
+    /**
+     * Инициализация контроллера, настройка таблиц и обработчиков событий
+     */
     @FXML
     public void initialize() {
         DatabaseInitializer.initializeDatabase();
@@ -108,13 +109,14 @@ public class ElementsController {
         loadTeachersData();
     }
 
-    // Метод для создания фабрики ячеек для простой таблицы
+    /**
+     * Создает фабрику ячеек для простой таблицы с центрированным текстом
+     */
     private Callback<TableColumn<SimpleItem, String>, TableCell<SimpleItem, String>> getCenteredSimpleCellFactory() {
         return column -> new TableCell<SimpleItem, String>() {
             @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
-
                 if (empty || item == null) {
                     setText(null);
                     setStyle("");
@@ -127,13 +129,14 @@ public class ElementsController {
         };
     }
 
-    // Метод для создания фабрики ячеек для таблицы преподавателей
+    /**
+     * Создает фабрику ячеек для таблицы преподавателей с центрированным текстом
+     */
     private Callback<TableColumn<Teacher, String>, TableCell<Teacher, String>> getCenteredTeacherCellFactory() {
         return column -> new TableCell<Teacher, String>() {
             @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
-
                 if (empty || item == null) {
                     setText(null);
                     setStyle("");
@@ -146,6 +149,9 @@ public class ElementsController {
         };
     }
 
+    /**
+     * Обрабатывает клик по панели категории
+     */
     private void handlePaneClick(Pane clickedPane, String category, String table) {
         // Сбрасываем стили всех Pane на белый фон
         groupOuterPane.setStyle("-fx-background-color: #FFFFFF;");
@@ -172,6 +178,9 @@ public class ElementsController {
         }
     }
 
+    /**
+     * Обрабатывает клик по кнопке добавления
+     */
     private void handleAddButtonClick() {
         switch (currentCategory) {
             case "Группа":
@@ -186,6 +195,9 @@ public class ElementsController {
         }
     }
 
+    /**
+     * Обрабатывает клик по кнопке удаления
+     */
     private void handleDeleteButtonClick() {
         switch (currentCategory) {
             case "Группа":
@@ -200,9 +212,11 @@ public class ElementsController {
         }
     }
 
+    /**
+     * Добавляет новую группу в базу данных
+     */
     private void addGroup() {
         Optional<String> result = DialogUtils.showAddGroupDialog();
-
         result.ifPresent(groupNumber -> {
             if (!groupNumber.isEmpty()) {
                 try {
@@ -219,18 +233,18 @@ public class ElementsController {
         });
     }
 
+    /**
+     * Добавляет нового преподавателя в базу данных
+     */
     private void addTeacher() {
         Optional<String[]> result = DialogUtils.showAddTeacherDialog();
-
         result.ifPresent(teacherData -> {
             if (teacherData != null && teacherData.length == 3 &&
                     !teacherData[0].isEmpty() && !teacherData[1].isEmpty()) {
-
                 try {
                     String query = "INSERT INTO teachers (surname, name, patronymic) VALUES (?, ?, ?)";
                     Database.executePreparedUpdate(query,
-                            teacherData[0],
-                            teacherData[1],
+                            teacherData[0], teacherData[1],
                             teacherData[2].isEmpty() ? null : teacherData[2]);
                     DialogUtils.showSuccessDialog("добавлен", "Преподаватель");
                     loadTeachersData();
@@ -243,9 +257,11 @@ public class ElementsController {
         });
     }
 
+    /**
+     * Добавляет новый предмет в базу данных
+     */
     private void addSubject() {
         Optional<String> result = DialogUtils.showAddSubjectDialog();
-
         result.ifPresent(subjectName -> {
             if (!subjectName.isEmpty()) {
                 try {
@@ -262,6 +278,9 @@ public class ElementsController {
         });
     }
 
+    /**
+     * Удаляет выбранную группу из базы данных
+     */
     private void deleteGroup() {
         SimpleItem selectedItem = simpleTableView.getSelectionModel().getSelectedItem();
         if (selectedItem == null) {
@@ -284,6 +303,9 @@ public class ElementsController {
         }
     }
 
+    /**
+     * Удаляет выбранного преподавателя из базы данных
+     */
     private void deleteTeacher() {
         Teacher selectedTeacher = teachersTableView.getSelectionModel().getSelectedItem();
         if (selectedTeacher == null) {
@@ -309,6 +331,9 @@ public class ElementsController {
         }
     }
 
+    /**
+     * Удаляет выбранный предмет из базы данных
+     */
     private void deleteSubject() {
         SimpleItem selectedItem = simpleTableView.getSelectionModel().getSelectedItem();
         if (selectedItem == null) {
@@ -331,6 +356,9 @@ public class ElementsController {
         }
     }
 
+    /**
+     * Загружает данные преподавателей из базы данных в таблицу
+     */
     private void loadTeachersData() {
         ObservableList<Teacher> data = FXCollections.observableArrayList();
         String query = "SELECT surname, name, patronymic FROM teachers ORDER BY surname, name, patronymic";
@@ -353,6 +381,9 @@ public class ElementsController {
         }
     }
 
+    /**
+     * Загружает данные групп из базы данных в таблицу
+     */
     private void loadGroupsData() {
         ObservableList<SimpleItem> data = FXCollections.observableArrayList();
         String query = "SELECT group_number FROM groups ORDER BY group_number";
@@ -370,9 +401,12 @@ public class ElementsController {
         }
     }
 
+    /**
+     * Загружает данные предметов из базы данных в таблицу
+     */
     private void loadSubjectsData() {
         ObservableList<SimpleItem> data = FXCollections.observableArrayList();
-        String query = "SELECT name FROM subjects ORDER BY name";
+        String query = "SELECT name FROM subjects ORDER BY name ASC";
 
         try (ResultSet resultSet = Database.executeQuery(query)) {
             if (resultSet != null) {
@@ -387,7 +421,9 @@ public class ElementsController {
         }
     }
 
-    // Внутренний класс для представления простых элементов (группы и предметы)
+    /**
+     * Внутренний класс для представления простых элементов (группы и предметы)
+     */
     public static class SimpleItem {
         private final String value;
 
@@ -405,7 +441,9 @@ public class ElementsController {
         }
     }
 
-    // Внутренний класс для представления преподавателя
+    /**
+     * Внутренний класс для представления преподавателя
+     */
     public static class Teacher {
         private final String surname;
         private final String name;
