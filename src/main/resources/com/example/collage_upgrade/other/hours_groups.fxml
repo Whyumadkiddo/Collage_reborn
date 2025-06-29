@@ -141,30 +141,29 @@
          <columns>
             <!-- Колонка "Преподаватель" с увеличенной шириной -->
             <TableColumn fx:id="teacherCol" prefWidth="200.0" text="Преподаватель" />
-
             <!-- Колонка для 1 семестра -->
             <TableColumn prefWidth="220.0" text="1 Семестр">
                <columns>
                   <TableColumn prefWidth="100.0" text="Часы в неделю" />
                   <TableColumn prefWidth="120.0" text="Часы по учебному" />
+                  <TableColumn prefWidth="120.0" text="Часы по практике" /> <!-- Новая колонка -->
                </columns>
             </TableColumn>
-
             <!-- Колонка для 2 семестра -->
             <TableColumn prefWidth="220.0" text="2 Семестр">
                <columns>
                   <TableColumn prefWidth="100.0" text="Часы в неделю" />
                   <TableColumn prefWidth="120.0" text="Часы по учебному" />
+                  <TableColumn prefWidth="120.0" text="Часы по практике" /> <!-- Новая колонка -->
                </columns>
             </TableColumn>
-
             <!-- Колонка "Предмет" с увеличенной шириной -->
             <TableColumn fx:id="subjectCol" prefWidth="200.0" text="Предмет" />
-
             <!-- Колонка "Итого" с уменьшенной шириной -->
             <TableColumn fx:id="totalCol" prefWidth="80.0" text="Итого" />
          </columns>
       </TableView>
+
 
       <!-- Кнопки управления -->
       <Pane fx:id="addButton" layoutX="14.0" layoutY="542.0" prefHeight="35.0" prefWidth="100.0" style="-fx-background-color: #6E6E6E;">

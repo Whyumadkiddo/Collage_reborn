@@ -2,44 +2,41 @@
 
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
+<AnchorPane prefHeight="585.0" prefWidth="1000.0" style="-fx-background-color: #1E1E1E;"
+            xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.collage_upgrade.hours_in_week.FirstSemesterController">
 
-<AnchorPane prefHeight="585.0" prefWidth="1000.0" style="-fx-background-color: #1E1E1E;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.collage_upgrade.hours_in_week.FirstSemesterController">
-   <children>
-      <Text fill="WHITE" layoutX="38.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1 Семестр">
-         <font>
-            <Font size="39.0" />
-         </font>
-      </Text>
-      <TableView layoutX="59.0" layoutY="101.0" prefHeight="384.0" prefWidth="883.0" style="-fx-background-color: #6E6E6E;">
-        <columns>
-          <TableColumn prefWidth="228.0" text="Группа" />
-          <TableColumn prefWidth="220.0" text="Теория" />
-            <TableColumn prefWidth="210.0" text="Практика" />
-            <TableColumn prefWidth="224.0" text="Всего" />
-        </columns>
-      </TableView>
-      <Pane fx:id="LocatePane" layoutX="596.0" layoutY="513.0" prefHeight="41.0" prefWidth="346.0" style="-fx-background-color: #6E6E6E;">
-         <children>
-            <Text fill="WHITE" layoutX="14.0" layoutY="25.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Поиск">
-               <font>
-                  <Font size="20.0" />
-               </font>
-            </Text>
-            <Line endX="112.0" layoutX="180.0" layoutY="33.0" startX="-100.0" stroke="WHITE" />
-            <ImageView fitHeight="30.0" fitWidth="28.0" layoutX="304.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../../../images/locate.png" />
-               </image>
-            </ImageView>
-         </children>
-      </Pane>
-   </children>
+    <children>
+        <Text fill="WHITE" layoutX="38.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1 Семестр">
+            <font>
+                <Font size="39.0" />
+            </font>
+        </Text>
+
+        <TableView fx:id="summaryTable" layoutX="59.0" layoutY="101.0" prefHeight="384.0" prefWidth="883.0"
+                   style="-fx-background-color: #6E6E6E; -fx-font-size: 16px;">
+            <columns>
+                <TableColumn fx:id="groupColumn" text="Группа" />
+                <TableColumn fx:id="theoryColumn" text="Теория" />
+                <TableColumn fx:id="practiceColumn" text="Практика" />
+                <TableColumn fx:id="totalColumn" text="Всего" />
+            </columns>
+        </TableView>
+
+        <Pane fx:id="LocatePane" layoutX="596.0" layoutY="513.0" prefHeight="41.0" prefWidth="346.0"
+              style="-fx-background-color: #6E6E6E;">
+            <children>
+                <Text fill="WHITE" layoutX="14.0" layoutY="25.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Поиск">
+                    <font>
+                        <Font size="20.0" />
+                    </font>
+                </Text>
+            </children>
+        </Pane>
+    </children>
 </AnchorPane>
